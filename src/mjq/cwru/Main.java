@@ -43,6 +43,7 @@ public class Main {
             return pq[--N];
         }
 
+        // if MinPQ is needed, replace less() with greate()
         private boolean less(int i, int j) {
             return pq[i].compareTo(pq[j]) < 0;
         }
@@ -65,7 +66,7 @@ public class Main {
             Key max = pq[0];
             exch(pq, 0, --N);
             sink(0);
-            pq[N+1] = null;
+            pq[N + 1] = null;
             return max;
         }
 
@@ -79,7 +80,7 @@ public class Main {
         private void sink(int k) {
             while (2 * k < N) {
                 int j = 2 * k;
-                if (less(j, j + 1)) j++; // find the larger child to switch
+                if (j + 1 < N && less(j, j + 1)) j++; // find the larger child to switch
                 if (!less(k, j)) break; //it means parent node is larger than both children
                 exch(pq, k, j);
                 k = j;
@@ -87,7 +88,53 @@ public class Main {
 
         }
 
+        // if MinPQ is needed, replace less() with greate()
         private boolean less(int i, int j) {
+            return pq[i].compareTo(pq[j]) < 0;
+        }
+
+    }
+
+    // Immutability
+    public final class Vector {
+        private final int N;
+        private final double[] data;
+
+        public Vector(double[] data) {
+            this.N = data.length;
+            this.data = new double[N];
+            for (int i = 0; i < N; i++)
+                this.data[i] = data[i];
+        }
+    }
+
+
+    public class HeapSort {
+
+        public void sort(Comparable[] pq) {
+            int N = pq.length;
+            // construct the max heap
+            for (int k = N / 2; k > 0; k--) {
+                sink(pq, k, N);
+            }
+            //sort
+            while (N > 0) {
+                exch(pq, 0, N--);
+                sink(pq, 0, N);
+            }
+        }
+
+        private void sink(Comparable[] pq, int k, int N) {
+            while (2 * k < N) {
+                int j = 2 * k;
+                if (j + 1 < N && less(pq, j, j + 1)) j++;
+                if (!less(pq, k, j)) break;
+                exch(pq, k, j);
+                k = j;
+            }
+        }
+
+        private boolean less(Comparable[] pq, int i, int j) {
             return pq[i].compareTo(pq[j]) < 0;
         }
 
